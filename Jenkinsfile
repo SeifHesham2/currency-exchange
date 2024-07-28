@@ -6,6 +6,7 @@ pipeline {
     }
     agent any
     stages {
+      
         stage('Environment Setup') {
             steps {
                 script {
@@ -25,21 +26,25 @@ pipeline {
                 }
             }
         }
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
+
         stage('Build') {
             steps {
                 sh 'mvn clean compile'
             }
         }
+
         stage('Test') {
             steps {
                 sh 'mvn test'
             }
         }
+
         stage('Integration Test') {
             steps {
                 sh 'mvn failsafe:integration-test failsafe:verify'
