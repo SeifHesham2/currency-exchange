@@ -6,7 +6,7 @@ pipeline {
     }
     agent any
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
                 script {
                     sh 'mvn --version'  // Verify Maven version
@@ -25,14 +25,19 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
+        stage('Build') {
             steps {
-                echo 'Testing..'
+                sh 'mvn clean compile'
             }
         }
-        stage('Deploy') {
+        stage('Test') {
             steps {
-                echo 'Deploying....'
+                sh 'mvn test'
+            }
+        }
+        stage('integration-test') {
+            steps {
+                sh "mvn failsafe:integration-test failsafe:verify"
             }
         }
     }
