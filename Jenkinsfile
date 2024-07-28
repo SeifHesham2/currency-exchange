@@ -6,13 +6,13 @@ pipeline {
     }
     agent any
     stages {
-        stage('Checkout') {
+        stage('Environment Setup') {
             steps {
                 script {
                     sh 'mvn --version'  // Verify Maven version
                     sh 'docker version' // Verify Docker version
-                    echo 'Building..'
-                    echo "$PATH"
+                    echo 'Environment variables:'
+                    echo "PATH - $PATH"
                     echo "BUILD_NUMBER - ${env.BUILD_NUMBER}"
                     echo "BUILD_ID - ${env.BUILD_ID}"
                     echo "JOB_NAME - ${env.JOB_NAME}"
@@ -25,6 +25,11 @@ pipeline {
                 }
             }
         }
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
                 sh 'mvn clean compile'
@@ -35,9 +40,9 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('integration-test') {
+        stage('Integration Test') {
             steps {
-                sh "mvn failsafe:integration-test failsafe:verify"
+                sh 'mvn failsafe:integration-test failsafe:verify'
             }
         }
     }
