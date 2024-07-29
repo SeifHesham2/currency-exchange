@@ -54,7 +54,7 @@ pipeline {
             steps {
                 script {
                     echo 'Pushing Docker image to registry...'
-                    docker.withRegistry('', 'dockerhub') {
+                    docker.withRegistry('', 'DockerHub') {
                         dockerImage.push()
                     }
                 }
