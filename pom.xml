@@ -39,12 +39,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>3.9.8</version>
-            <type>maven-plugin</type>
-        </dependency>
         <!-- Updated to a compatible version -->
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
@@ -192,11 +186,6 @@
     </build>
 
     <repositories>
-
-        <repository>
-            <id>central</id>
-            <url>https://repo.maven.apache.org/maven2</url>
-        </repository>
         <repository>
             <id>spring-snapshots</id>
             <name>Spring Snapshots</name>
