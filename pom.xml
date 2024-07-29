@@ -22,19 +22,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <maven-jar-plugin.version>3.9.8</maven-jar-plugin.version>
         <spring-cloud.version>Greenwich.SR3</spring-cloud.version>
-          
         <surefire.version>2.22.2</surefire.version>
         <failsafe.version>2.22.2</failsafe.version>
-
         <jacoco.version>0.8.3</jacoco.version>
         <jacoco.path>${settings.localRepository}/org/jacoco/org.jacoco.agent/${jacoco.version}/org.jacoco.agent-${jacoco.version}-runtime.jar</jacoco.path>
         <jacoco.utReport>${project.build.directory}/jacoco.exec</jacoco.utReport>
         <jacoco.itReport>${project.build.directory}/jacoco-it.exec</jacoco.itReport>
         <jacoco.utAgentConfig>-javaagent:${jacoco.path}=destfile=${jacoco.utReport}</jacoco.utAgentConfig>
         <jacoco.itAgentConfig>-javaagent:${jacoco.path}=destfile=${jacoco.itReport}</jacoco.itAgentConfig>
-
         <jacoco-listeners.version>5.10.2.17019</jacoco-listeners.version>
     </properties>
 
@@ -182,6 +178,11 @@
                     </includes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -202,6 +203,11 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -220,6 +226,11 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
         </pluginRepository>
     </pluginRepositories>
 </project>
