@@ -1,50 +1,45 @@
 pipeline {
-    environment {
-        dockerHome = tool 'myDocker'  // Ensure 'myDocker' tool is correctly configured
-        mavenHome = tool 'myMaven'    // Ensure 'myMaven' tool is correctly configured
-        PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
-    }
     agent any
+    
     stages {
-        stage('Environment Setup') {
+        stage('Package') {
             steps {
                 script {
-                    sh 'mvn --version'  // Verify Maven version
-                    sh 'docker version' // Verify Docker version
-                    sh 'echo $PATH' // Verify PATH
+                    try {
+                        sh 'mvn clean package'
+                    } catch (Exception e) {
+                        echo "Maven build failed: ${e.message}"
+                        error("Maven build failed")
+                    }
                 }
             }
         }
-        stage('Checkout') {
+        stage('Build Docker Image') {
             steps {
-                checkout scm
+                script {
+                    try {
+                        app = docker.build("in28minutes/docker-spring-boot:${env.BUILD_NUMBER}")
+                    } catch (Exception e) {
+                        echo "Docker build failed: ${e.message}"
+                        error("Docker build failed")
+                    }
+                }
             }
         }
-        stage('Build') {
+        stage('Push Docker Image') {
             steps {
-                sh 'mvn clean compile'
+                script {
+                    try {
+                        docker.withRegistry('', 'DockerHub') {
+                            app.push()
+                            app.push("latest")
+                        }
+                    } catch (Exception e) {
+                        echo "Docker push failed: ${e.message}"
+                        error("Docker push failed")
+                    }
+                }
             }
-        }
-        stage('Test') {
-            steps {
-                sh 'mvn test -X' // Add debug logging for tests
-            }
-        }
-        stage('Integration Test') {
-            steps {
-                sh 'mvn failsafe:integration-test failsafe:verify -X' // Add debug logging for integration tests
-            }
-        }
-    }
-    post {
-        always {
-            echo 'One way or another, I have finished'
-        }
-        success {
-            echo 'I succeeded!'
-        }
-        failure {
-            echo 'I failed :('
         }
     }
 }
