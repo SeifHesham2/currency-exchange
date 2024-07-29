@@ -63,13 +63,13 @@ pipeline {
     }
     post {
         always {
-            echo 'One way or another, I have finished'
+            echo 'finished'
         }
         success {
-            echo 'I succeeded!'
+            echo 'succeeded!'
         }
         failure {
-            echo 'I failed :('
+            echo 'failed'
         }
     }
 }
