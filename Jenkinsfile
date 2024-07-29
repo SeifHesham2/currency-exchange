@@ -2,27 +2,17 @@ pipeline {
     environment {
         dockerHome = tool 'myDocker'  // Ensure 'myDocker' tool is correctly configured
         mavenHome = tool 'myMaven'    // Ensure 'myMaven' tool is correctly configured
-        PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
+        PATH = "${dockerHome}/bin:${mavenHome}/bin:${env.PATH}"
     }
     agent any
     stages {
-      
         stage('Environment Setup') {
             steps {
                 script {
+                    echo 'Verifying Environment Setup...'
                     sh 'mvn --version'  // Verify Maven version
-                    sh 'docker version' // Verify Docker version
-                    echo 'Environment variables:'
-                    echo "PATH - $PATH"
-                    echo "BUILD_NUMBER - ${env.BUILD_NUMBER}"
-                    echo "BUILD_ID - ${env.BUILD_ID}"
-                    echo "JOB_NAME - ${env.JOB_NAME}"
-                    echo "BUILD_URL - ${env.BUILD_URL}"
-                    echo "JOB_URL - ${env.JOB_URL}"
-                    echo "BUILD_TAG - ${env.BUILD_TAG}"
-                    echo "EXECUTOR_NUMBER - ${env.EXECUTOR_NUMBER}"
-                    echo "NODE_NAME - ${env.NODE_NAME}"
-                    echo "NODE_LABELS - ${env.NODE_LABELS}"
+                    sh 'docker --version' // Verify Docker version
+                    echo 'Environment variables:'           
                 }
             }
         }
@@ -42,6 +32,32 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    echo 'Building Docker image...'
+                    dockerImage = docker.build("seifseddik120/currencyexchange:${env.BUILD_NUMBER}")
+                }        
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    echo 'Pushing Docker image to registry...'
+                    docker.withRegistry('', 'dockerhub') {
+                        dockerImage.push()
+                    }
+                }
             }
         }
     }
