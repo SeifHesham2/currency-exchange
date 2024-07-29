@@ -1,4 +1,9 @@
 pipeline {
+     environment {
+        dockerHome = tool 'myDocker'  // Ensure 'myDocker' tool is correctly configured
+        mavenHome = tool 'myMaven'    // Ensure 'myMaven' tool is correctly configured
+        PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
+    }
     agent any
     
     stages {
