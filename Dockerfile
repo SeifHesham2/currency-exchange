@@ -1,11 +1,6 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.10-slim
-
-# Set the working directory inside the container
-WORKDIR /app
-
-# Define the command to run your application
-CMD ["python", "app.py"]
-
-# Expose a port (if your application uses one)
-EXPOSE 5000
+FROM openjdk:8-jdk-alpine
+VOLUME /tmp
+EXPOSE 8000
+ADD target/*.jar app.jar
+ENV JAVA_OPTS=""
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
