@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        app = docker.build("in28minutes/docker-spring-boot:${env.BUILD_NUMBER}")
+                        app = docker.build("seifseddik120/in28minutes:${env.BUILD_NUMBER}")
                     } catch (Exception e) {
                         echo "Docker build failed: ${e.message}"
                         error("Docker build failed")
