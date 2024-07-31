@@ -61,27 +61,11 @@ pipeline {
             }
         }
 
-        stage('Install kubectl') {
+        stage('Start Minikube') {
             steps {
                 script {
-                    echo 'Installing kubectl...'
-                    sh '''
-                    curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.30.3/bin/linux/amd64/kubectl
-                    chmod +x ./kubectl
-                    sudo mv ./kubectl /usr/local/bin/kubectl
-                    '''
-                }
-            }
-        }
-
-        stage('Setup Minikube Context') {
-            steps {
-                script {
-                    echo 'Setting up Minikube context...'
-                    sh '''
-                    minikube start
-                    kubectl config use-context minikube
-                    '''
+                    echo 'Starting Minikube...'
+                    sh 'minikube start'
                 }
             }
         }
