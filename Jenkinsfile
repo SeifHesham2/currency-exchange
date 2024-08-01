@@ -45,22 +45,12 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker image...'
-                    dockerImage = docker.build("seifseddik120/currencyexchange:${env.BUILD_NUMBER}")
+                    dockerImage = docker.build("seifseddik120/currencyexchange:82")
                 }
             }
         }
 
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    echo 'Pushing Docker image to registry...'
-                    docker.withRegistry('', 'DockerHub') {
-                        dockerImage.push()
-                    }
-                }
-            }
-        }
-
+   
         stage('Start Minikube') {
             steps {
                 script {
