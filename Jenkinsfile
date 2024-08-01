@@ -74,7 +74,7 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying to Kubernetes...'
-                    sh 'kubectl apply -f deployment.yaml'
+                    sh 'envsubst < deployment.yaml | kubectl apply -f -'
                     sh 'kubectl apply -f service.yaml'
                 }
             }
