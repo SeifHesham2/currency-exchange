@@ -45,7 +45,7 @@ pipeline {
             steps {
                 script {
                     echo 'Building Docker image...'
-                    dockerImage = docker.build("seifseddik120/currencyexchange:82")
+                    dockerImage = docker.build("seifseddik120/currencyexchange:${env.BUILD_NUMBER}")
                 }
             }
         }
